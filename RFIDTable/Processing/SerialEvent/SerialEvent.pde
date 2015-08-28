@@ -16,13 +16,13 @@ String inString="-1";  // Input string from serial port
 void setup() { 
   size(400,200); 
   keySim = new KeystrokeSimulator();
-  osc = new OscSender(1201,1200);
+  osc = new OSCSender(1201,12000);
   // List all the available serial ports: 
   println(Serial.list()); 
   // I know that the first port in the serial list on my mac 
   // is always my  Keyspan adaptor, so I open Serial.list()[0]. 
   // Open whatever port is the one you're using. 
-  myPort = new Serial(this, Serial.list()[0], 9600); 
+  myPort = new Serial(this, Serial.list()[4], 9600); 
   myPort.buffer(1);
 } 
  
@@ -35,7 +35,7 @@ void serialEvent(Serial p) {
   inString = p.readString();
   int videoID = Integer.parseInt(inString);
   println(videoID);
-  try{
+  //try{
     switch(videoID){
       case 0:
         //keySim.simulate(KeyEvent.VK_Q);
@@ -43,10 +43,10 @@ void serialEvent(Serial p) {
       break;
       case 1:
         //keySim.simulate(KeyEvent.VK_W);
-        osc.send("/2/push2");
+        osc.send("/pappo");
       break;
     }
-  }catch(AWTException e){
+  /*}catch(AWTException e){
     println(e);
-  }
+  }*/
 }
