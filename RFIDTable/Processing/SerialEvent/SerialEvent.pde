@@ -8,15 +8,11 @@ Robot robot;
 import processing.serial.*; 
  
 Serial myPort;    // The serial port
-PFont myFont;     // The display font
 String inString="-1";  // Input string from serial port
-int lf = 10;      // ASCII linefeed 
+
  
 void setup() { 
   size(400,200); 
-  // You'll need to make this font with the Create Font Tool 
-  //myFont = loadFont("ArialMS-18.vlw"); 
-  //textFont(myFont, 18);
   keySim = new KeystrokeSimulator();
   // List all the available serial ports: 
   println(Serial.list()); 
@@ -25,7 +21,6 @@ void setup() {
   // Open whatever port is the one you're using. 
   myPort = new Serial(this, Serial.list()[0], 9600); 
   myPort.buffer(1);
-  //myPort.bufferUntil(lf); 
 } 
  
 void draw() { 

@@ -1,20 +1,17 @@
-// RFID reader ID-12 for Arduino 
-// Based on code by BARRAGAN <http://people.interaction-ivrea.it/h.barragan> 
-// and code from HC Gilje - http://hcgilje.wordpress.com/resources/rfid_id12_tagreader/
-// Modified for Arudino by djmatic
-// Modified for ID-12 and checksum by Martijn The - http://www.martijnthe.nl/
-//
-// Use the drawings from HC Gilje to wire up the ID-12.
+// RFID reader ID-12 for Arduino
+// Wiring - http://hcgilje.wordpress.com/resources/rfid_id12_tagreader/
 // Remark: disconnect the rx serial wire to the ID-12 when uploading the sketch
 
 
 void setup() {
   Serial.begin(9600);                                 // connect to the serial port
 }
-int videoNumber = 2;
+int videoNumber = 2;//In accord with the rows size of the array below
 byte codes [][5] = { {0x0,0x0,0x0,0x1,0x50},
                      {0x0,0x0,0x0,0x1,0x51}
-                   };
+                   };//Contains the IDs of the coded Tag, to add new a new one uncomment the below #define and manually add the printed ID
+
+//#define DEBUG 
 
 int sendVideo(byte *id){
   for(int i=0;i<videoNumber;i++){
@@ -82,13 +79,15 @@ void loop () {
         Serial.print("Send Video: ");
 #endif      
         Serial.print(sendVideo(code));
-        //Serial.println();
-        /*Serial.println();
+#ifdef DEBUG        
+        Serial.println();
+        Serial.println();
 
         Serial.print("Checksum: ");
         Serial.print(code[5], HEX);
         Serial.println(code[5] == checksum ? " -- passed." : " -- error.");
-        Serial.println();*/
+        Serial.println();
+#endif
       }
 
       bytesread = 0;
