@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import processing.serial.*;
 
 KeystrokeSimulator keySim;
+OSCSender          osc;
+
 Robot robot; 
 import processing.serial.*; 
  
@@ -14,6 +16,7 @@ String inString="-1";  // Input string from serial port
 void setup() { 
   size(400,200); 
   keySim = new KeystrokeSimulator();
+  osc = new OscSender(1201,1200);
   // List all the available serial ports: 
   println(Serial.list()); 
   // I know that the first port in the serial list on my mac 
@@ -35,37 +38,15 @@ void serialEvent(Serial p) {
   try{
     switch(videoID){
       case 0:
-        keySim.simulate(KeyEvent.VK_Q);
+        //keySim.simulate(KeyEvent.VK_Q);
+        osc.send("/2/push1");
       break;
       case 1:
-        keySim.simulate(KeyEvent.VK_W);
+        //keySim.simulate(KeyEvent.VK_W);
+        osc.send("/2/push2");
       break;
     }
   }catch(AWTException e){
     println(e);
-  }
-   
-}
-
-import java.awt.Robot;
-import java.awt.AWTException;
-
-public class KeystrokeSimulator {
-
-private Robot robot;
-  
-  KeystrokeSimulator(){
-    try{
-      robot = new Robot();  
-    }
-    catch(AWTException e){
-      println(e);
-    }
-  }
-  
-  void simulate(int c) throws AWTException {
-      robot.keyPress(c);
-      robot.delay(80);
-      robot.keyRelease(c);
   }
 }
