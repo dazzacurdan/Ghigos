@@ -8,15 +8,15 @@ private Robot robot;
   KeystrokeSimulator(){
     try{
       robot = new Robot();  
-    }
-    catch(AWTException e){
+    }catch(AWTException e){
       println(e);
     }
   }
   
-  void simulate(int c) throws AWTException {
+  boolean simulate(int c) throws AWTException {
       robot.keyPress(c);
       robot.delay(80);
       robot.keyRelease(c);
+      return true;
   }
 }
