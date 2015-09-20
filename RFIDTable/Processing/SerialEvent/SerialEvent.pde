@@ -12,7 +12,7 @@ Robot robot;
 import processing.serial.*; 
  
 Serial myPort;    // The serial port
-String inString="-1";  // Input string from serial port
+String inString="9";  // Input string from serial port
 
  
 void setup() { 
@@ -25,7 +25,7 @@ void setup() {
   // is always my  Keyspan adaptor, so I open Serial.list()[0]. 
   // Open whatever port is the one you're using. 
   myPort = new Serial(this, Serial.list()[0], 9600); 
-  myPort.buffer(2);
+  myPort.buffer(1);
 } 
  
 void draw() { 

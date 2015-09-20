@@ -9,11 +9,11 @@ void setup() {
 enum{
    tavolo1,
    tavolo1_back,
-   taavolo2,
+   tavolo2,
    tavolo2_back
 };
 
-int ActualTable= tavolo1_back;// Valid values are: 0 for the first table 1 for the second one
+int ActualTable= tavolo1;// Valid values are: 0 for the first table 1 for the second one
 //int Actualtable= 1;
 byte codes [4][6][5] = { 
                           {
@@ -60,7 +60,7 @@ int sendVideo(byte *id){
       return i;
     }
   }
-  return -1;
+  return 9;
 }
 
 void loop () {
