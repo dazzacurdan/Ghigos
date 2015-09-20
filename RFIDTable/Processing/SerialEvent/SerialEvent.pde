@@ -24,8 +24,8 @@ void setup() {
   // I know that the first port in the serial list on my mac 
   // is always my  Keyspan adaptor, so I open Serial.list()[0]. 
   // Open whatever port is the one you're using. 
-  myPort = new Serial(this, Serial.list()[4], 9600); 
-  myPort.buffer(1);
+  myPort = new Serial(this, Serial.list()[0], 9600); 
+  myPort.buffer(2);
 } 
  
 void draw() { 
@@ -33,11 +33,13 @@ void draw() {
   text("Play video: " + inString, 10,50);
 } 
  
-void serialEvent(Serial p) { 
-  inString = p.readString();
-  int videoID = Integer.parseInt(inString);
-  println(videoID);
+void serialEvent(Serial p) {
   try{
+    
+    inString = p.readString();
+    int videoID = Integer.parseInt(inString);
+    println(videoID);
+  
     switch(videoID){
       case 0:
         sended = enableOSC ? osc.send("/2/push1") : keySim.simulate(KeyEvent.VK_Q);
@@ -56,24 +58,6 @@ void serialEvent(Serial p) {
       break;
       case 5:
         sended = enableOSC ? osc.send("/2/push6") : keySim.simulate(KeyEvent.VK_Y);
-      break;
-      case 6:
-        sended = enableOSC ? osc.send("/2/push7") : keySim.simulate(KeyEvent.VK_U);
-      break;
-      case 7:
-        sended = enableOSC ? osc.send("/2/push8") : keySim.simulate(KeyEvent.VK_I);
-      break;
-      case 8:
-        sended = enableOSC ? osc.send("/2/push9") : keySim.simulate(KeyEvent.VK_O);
-      break;
-      case 9:
-        sended = enableOSC ? osc.send("/2/push10") : keySim.simulate(KeyEvent.VK_P);
-      break;
-      case 10:
-        sended = enableOSC ? osc.send("/2/push11") : keySim.simulate(KeyEvent.VK_A);
-      break;
-      case 11:
-        sended = enableOSC ? osc.send("/2/push12") : keySim.simulate(KeyEvent.VK_S);
       break;
     }
   }catch(AWTException e){
