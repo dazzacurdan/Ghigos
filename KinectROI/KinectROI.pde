@@ -1,11 +1,7 @@
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 
 Kinect kinect;
-KeystrokeSimulator keySim;
 
 boolean ir = false;
 boolean colorDepth = false;
@@ -16,6 +12,7 @@ Iterator<ROI> it_roi;
 int actMouseX,actMouseY;
 boolean lock;
 int startTime;
+PlayVideo video;
 
 void setup() {
   size(640, 480);
@@ -23,7 +20,6 @@ void setup() {
   kinect.initDepth();
   kinect.enableColorDepth(true);
   ROIContainer = new Vector<ROI>();
-  keySim = new KeystrokeSimulator();
   lock = false;
 }
 
@@ -37,9 +33,9 @@ void draw() {
     if( ROIContainer.get(i).visualize(kImg) && !lock)
     {
       startTime = millis();
+      video.play(i);
       thread("lockFunction");
-    }  
-    //keySim.simulate(KeyEvent.VK_Q)
+    }
   }
   if(lock)
   {
@@ -50,11 +46,9 @@ void draw() {
 }
 void lockFunction()
 {
-  println("LOCKED");
   lock = true;
   delay(45000);
   lock = false;
-  println("UN_LOCKED");
 }
 void keyPressed() {
   switch (key) 
