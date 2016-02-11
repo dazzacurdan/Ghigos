@@ -13,6 +13,8 @@ int actMouseX,actMouseY;
 boolean lock;
 int startTime;
 PlayVideo video;
+ConfigParser parser;
+boolean lockROIContainer;
 
 void setup() {
   size(640, 480);
@@ -22,6 +24,8 @@ void setup() {
   ROIContainer = new Vector<ROI>();
   video = new PlayVideo();
   lock = false;
+  parser =new ConfigParser();
+  lockROIContainer = parser.loadROI("config.xml",ROIContainer);
 }
 
 void draw() {
@@ -63,27 +67,29 @@ void keyPressed() {
      break;
     case 's':
     {
-      XML xml = loadXML("roi.xml");
-      xml.setName("Regions");
-      for(int i=0;i<ROIContainer.size();++i)
+      if(!lockROIContainer )
       {
-         XML child = xml.addChild("roi");
-        child.setInt( "id", i );
-        child.setInt( "x", ROIContainer.get(i).x );
-        child.setInt( "y", ROIContainer.get(i).y );
-        child.setInt( "w", ROIContainer.get(i).w );
-        child.setInt( "h", ROIContainer.get(i).h );
-        
-        child.setContent("blablabla");
+        XML xml = loadXML("roi.xml");
+        xml.setName("Regions");
+        for(int i=0;i<ROIContainer.size();++i)
+        {
+           XML child = xml.addChild("roi");
+          child.setInt( "id", i );
+          child.setInt( "x", ROIContainer.get(i).x );
+          child.setInt( "y", ROIContainer.get(i).y );
+          child.setInt( "w", ROIContainer.get(i).w );
+          child.setInt( "h", ROIContainer.get(i).h );
+          
+          child.setContent("blablabla");
+        }
+        saveXML(xml,"config.xml");
       }
-      saveXML(xml,"config.xml");
     }
     break;
   }
 }
-
 void mousePressed() {
-  if (mouseButton == RIGHT)
+  if (mouseButton == RIGHT && !lockROIContainer)
   {
     if(!ROIContainer.isEmpty())ROIContainer.remove(ROIContainer.lastElement());
   }else
@@ -93,7 +99,7 @@ void mousePressed() {
   }
 }
 void mouseReleased() {
-  if (mouseButton != RIGHT)
+  if (mouseButton != RIGHT && !lockROIContainer)
   {
     ROIContainer.addElement(new ROI(actMouseX,actMouseY,mouseX-actMouseX,mouseX-actMouseX));
   }
