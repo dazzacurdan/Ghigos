@@ -12,7 +12,7 @@ public class ROI
     this.w=w;
     this.h=h;
     this.size = w * h;
-    avg_color = color(50,0,0);
+    avgColor = color(50,0,0);
     coverage=0;
   }
   boolean visualize(PImage kImg)
@@ -41,19 +41,26 @@ public class ROI
       for( int _x=x;_x<roiW;++_x )
       {
         c = kImg.pixels[_x+(_y*(kImg.width))];
-        if( c > avg_color ) ++coverage;
+        if( c > avgColor ) ++coverage;
       }
     coverage/=size; 
     if( coverage > 0.8  )
       return true;
     return false;
   }
-  
+  void setAvgColor(color _avgColor)
+  {
+    avgColor = _avgColor;
+  }
+  color getAvgColor()
+  {
+    return avgColor;
+  }
   private int x;
   private int y;
   private int w;
   private int h;
   private float size;
-  private color avg_color;
+  private color avgColor;
   private float coverage;
 }

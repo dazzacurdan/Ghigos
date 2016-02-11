@@ -21,7 +21,9 @@ class ConfigParser
                                       children[i].getInt("y"),
                                       children[i].getInt("w"),
                                       children[i].getInt("h")
-                                      ));
+                                      ));                             
+      ROIContainer.lastElement().setAvgColor( color(Integer.parseInt(children[i].getContent(),32) ) );
+      println(hex(color(Integer.parseInt(children[i].getContent()))));
     }
     return true;
   }

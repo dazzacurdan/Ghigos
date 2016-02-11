@@ -80,10 +80,15 @@ void keyPressed() {
           child.setInt( "w", ROIContainer.get(i).w );
           child.setInt( "h", ROIContainer.get(i).h );
           
-          child.setContent("blablabla");
+          child.setContent(Integer.toString(ROIContainer.get(i).getAvgColor()));
         }
         saveXML(xml,"config.xml");
       }
+    }
+    break;
+    case 'a':
+    {
+      ROIContainer.lastElement().setAvgColor( kImg.pixels[mouseX+mouseY*kImg.width] );
     }
     break;
   }
