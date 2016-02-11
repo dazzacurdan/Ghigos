@@ -20,6 +20,7 @@ void setup() {
   kinect.initDepth();
   kinect.enableColorDepth(true);
   ROIContainer = new Vector<ROI>();
+  video = new PlayVideo();
   lock = false;
 }
 
