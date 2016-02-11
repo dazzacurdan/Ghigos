@@ -15,13 +15,14 @@ public class ROI
     avg_color = color(50,0,0);
     coverage=0;
   }
-  void visualize(PImage kImg)
+  boolean visualize(PImage kImg)
   {
     coverage=0;
     stroke(255,0,0);
     noFill();
     rect(x, y, w, h);
-    if( isActive(kImg) )
+    boolean out = isActive(kImg);
+    if( out )
     {
       fill(0,255,0);
       rect(x, y, w, h);
@@ -29,6 +30,7 @@ public class ROI
     fill(255,255,255);
     textSize(10);
     text("("+x+", "+y+", "+w+", "+h+") "+coverage+"%",x,y-2);
+    return out;
   }
   boolean isActive( PImage kImg)
   {

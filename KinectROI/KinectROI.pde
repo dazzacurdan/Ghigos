@@ -1,9 +1,11 @@
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 
 Kinect kinect;
-
-float deg;
+KeystrokeSimulator keySim;
 
 boolean ir = false;
 boolean colorDepth = false;
@@ -12,8 +14,8 @@ PImage kImg;
 Vector<ROI> ROIContainer;
 Iterator<ROI> it_roi;
 int actMouseX,actMouseY;
-
-XML xml;
+boolean lock;
+int startTime;
 
 void setup() {
   size(640, 480);
@@ -21,6 +23,8 @@ void setup() {
   kinect.initDepth();
   kinect.enableColorDepth(true);
   ROIContainer = new Vector<ROI>();
+  keySim = new KeystrokeSimulator();
+  lock = false;
 }
 
 void draw() {
@@ -30,10 +34,28 @@ void draw() {
   
   for(int i=0;i<ROIContainer.size();++i)
   {
-    ROIContainer.get(i).visualize(kImg);
+    if( ROIContainer.get(i).visualize(kImg) && !lock)
+    {
+      startTime = millis();
+      thread("lockFunction");
+    }  
+    //keySim.simulate(KeyEvent.VK_Q)
+  }
+  if(lock)
+  {
+    fill(0, 102, 153);
+    textSize(150);
+    text((int)((millis()-startTime)/1e3),213,240);
   }
 }
-
+void lockFunction()
+{
+  println("LOCKED");
+  lock = true;
+  delay(45000);
+  lock = false;
+  println("UN_LOCKED");
+}
 void keyPressed() {
   switch (key) 
   {
@@ -46,6 +68,7 @@ void keyPressed() {
      break;
     case 's':
     {
+      XML xml = loadXML("roi.xml");
       xml.setName("Regions");
       for(int i=0;i<ROIContainer.size();++i)
       {
@@ -55,7 +78,7 @@ void keyPressed() {
         child.setInt( "y", ROIContainer.get(i).y );
         child.setInt( "w", ROIContainer.get(i).w );
         child.setInt( "h", ROIContainer.get(i).h );
-        child.setInt( "th",i+5 );
+        
         child.setContent("blablabla");
       }
       saveXML(xml,"config.xml");
