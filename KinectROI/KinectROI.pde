@@ -80,7 +80,7 @@ void keyPressed() {
           child.setInt( "w", ROIContainer.get(i).w );
           child.setInt( "h", ROIContainer.get(i).h );
           
-          child.setContent(Integer.toString(ROIContainer.get(i).getAvgColor()));
+          child.setContent(hex(ROIContainer.get(i).getAvgColor()));
         }
         saveXML(xml,"config.xml");
       }

@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 class ConfigParser
 {
   ConfigParser(){}
@@ -22,6 +24,7 @@ class ConfigParser
                                       children[i].getInt("w"),
                                       children[i].getInt("h")
                                       ));
+      ROIContainer.lastElement().setAvgColor(Color.decode("#"+children[i].getContent().substring(2)).getRGB());
       println(hex(color(Integer.parseInt(children[i].getContent()))));
     }
     return true;
