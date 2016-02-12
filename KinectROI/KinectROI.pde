@@ -89,6 +89,7 @@ void keyPressed() {
     case 'a':
     {
       ROIContainer.lastElement().setAvgColor( kImg.pixels[mouseX+mouseY*kImg.width] );
+      println(hex(kImg.pixels[mouseX+mouseY*kImg.width]));
     }
     break;
   }
