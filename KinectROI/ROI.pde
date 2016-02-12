@@ -12,7 +12,8 @@ public class ROI
     this.w=w;
     this.h=h;
     this.size = w * h;
-    avgColor = color(50,0,0);
+    avgColor = color(0,0,0);
+    thColor = color(255,255,255);
     coverage=0;
   }
   boolean visualize(PImage kImg)
@@ -38,29 +39,57 @@ public class ROI
     int roiH = y+h;
     int roiW = x+w;
     for( int _y=y;_y<roiH;++_y )
+    {
       for( int _x=x;_x<roiW;++_x )
       {
         c = kImg.pixels[_x+(_y*(kImg.width))];
-        if( c > avgColor ) ++coverage;
+        if( c > thColor ) ++coverage;
+        
+          
       }
+    }
     coverage/=size; 
     if( coverage > 0.8  )
       return true;
     return false;
   }
-  void setAvgColor(color _avgColor)
+  void setThColor(color _thColor)
   {
-    avgColor = _avgColor;
+    thColor = _thColor;
+  }
+  color getThColor()
+  {
+    return thColor;
+  }
+  void setAvgColor()
+  {
+    int r=0,g=0,b=0;
+    color c;
+    int roiH = y+h;
+    int roiW = x+w;
+    for( int _y=y;_y<roiH;++_y )
+    {
+      for( int _x=x;_x<roiW;++_x )
+      {
+        c = kImg.pixels[_x+(_y*(kImg.width))];
+          r += (c >> 16) & 0xFF;
+          g += (c >> 8) & 0xFF;
+          b += c & 0xFF;
+      }
+    }
+    avgColor = color(r,g,b);
   }
   color getAvgColor()
   {
     return avgColor;
   }
+  
   private int x;
   private int y;
   private int w;
   private int h;
   private float size;
   private color avgColor;
+  private color thColor;
   private float coverage;
 }

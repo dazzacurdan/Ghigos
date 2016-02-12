@@ -1,6 +1,6 @@
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
-
+int fontSize = 15;
 Kinect kinect;
 
 boolean ir = false;
@@ -48,6 +48,11 @@ void draw() {
     textSize(150);
     text((int)((millis()-startTime)/1e3),213,240);
   }
+  fill(0, 102, 153);
+  textSize(fontSize);
+  text("Press c to visualize color under the mouse",3,fontSize);
+  text("Press s to save current configuration",3,fontSize*2);
+  text("Press t to set the threasold for each areas",3,fontSize*3);
 }
 void lockFunction()
 {
@@ -62,7 +67,7 @@ void keyPressed() {
     {
       color actColor = kImg.pixels[mouseX+mouseY*kImg.width];
       actColor &= 0x00FFFFFF; 
-      println(hex(actColor)+" color("+((actColor >> 16)&0x0000FF)+", "+((actColor >> 8)&0x0000FF)+", "+(actColor & 0xFF)+")");
+      println("Actual Color: "+hex(actColor)+" color("+((actColor >> 16)&0x0000FF)+", "+((actColor >> 8)&0x0000FF)+", "+(actColor & 0xFF)+")");
     }
      break;
     case 's':
@@ -79,17 +84,19 @@ void keyPressed() {
           child.setInt( "y", ROIContainer.get(i).y );
           child.setInt( "w", ROIContainer.get(i).w );
           child.setInt( "h", ROIContainer.get(i).h );
-          
-          child.setContent(hex(ROIContainer.get(i).getAvgColor()));
+          child.setString("avgColor",hex(ROIContainer.get(i).getAvgColor()));
+          child.setContent(hex(ROIContainer.get(i).getThColor()));
         }
         saveXML(xml,"config.xml");
       }
     }
     break;
-    case 'a':
+    case 't':
     {
-      ROIContainer.lastElement().setAvgColor( kImg.pixels[mouseX+mouseY*kImg.width] );
-      println(hex(kImg.pixels[mouseX+mouseY*kImg.width]));
+      color actColor = kImg.pixels[mouseX+mouseY*kImg.width];
+      ROIContainer.lastElement().setThColor( actColor );
+      actColor &= 0x00FFFFFF; 
+      println("TH color: "+hex(actColor)+" color("+((actColor >> 16)&0x0000FF)+", "+((actColor >> 8)&0x0000FF)+", "+(actColor & 0xFF)+")");
     }
     break;
   }
@@ -108,5 +115,6 @@ void mouseReleased() {
   if (mouseButton != RIGHT && !lockROIContainer)
   {
     ROIContainer.addElement(new ROI(actMouseX,actMouseY,mouseX-actMouseX,mouseX-actMouseX));
+    ROIContainer.lastElement().setAvgColor();
   }
 }
