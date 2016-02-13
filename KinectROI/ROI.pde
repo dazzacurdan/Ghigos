@@ -49,7 +49,7 @@ public class ROI
       }
     }
     coverage/=size; 
-    if( coverage > 0.8  )
+    if( coverage > 0.7  )
       return true;
     return false;
   }

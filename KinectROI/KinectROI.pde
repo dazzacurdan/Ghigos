@@ -114,7 +114,7 @@ void mousePressed() {
 void mouseReleased() {
   if (mouseButton != RIGHT && !lockROIContainer)
   {
-    ROIContainer.addElement(new ROI(actMouseX,actMouseY,mouseX-actMouseX,mouseX-actMouseX));
+    ROIContainer.addElement(new ROI(actMouseX,actMouseY,mouseX-actMouseX,mouseY-actMouseY));
     ROIContainer.lastElement().setAvgColor();
   }
 }
