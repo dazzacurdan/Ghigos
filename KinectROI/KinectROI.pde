@@ -1,8 +1,9 @@
 import org.openkinect.freenect.*;
 import org.openkinect.processing.*;
+import ddf.minim.*;
+
 int fontSize = 15;
 Kinect kinect;
-
 boolean ir = false;
 boolean colorDepth = false;
 boolean mirror = false;
@@ -10,20 +11,29 @@ PImage kImg;
 Vector<ROI> ROIContainer;
 Iterator<ROI> it_roi;
 int actMouseX,actMouseY;
-boolean lock;
+boolean lock,mouseDragged;
+
 int startTime;
 PlayVideo video;
 ConfigParser parser;
 boolean lockROIContainer;
 
+Minim minim;
+AudioPlayer player;
+
 void setup() {
   size(640, 480);
+  
+  minim = new Minim(this);
+  player = minim.loadFile("audio.mp3",512);
+  player.loop();
+  
   kinect = new Kinect(this);
   kinect.initDepth();
   kinect.enableColorDepth(true);
   ROIContainer = new Vector<ROI>();
   video = new PlayVideo();
-  lock = false;
+  lock = false;mouseDragged=false;
   parser =new ConfigParser();
   lockROIContainer = parser.loadROI("config.xml",ROIContainer);
 }
@@ -37,9 +47,9 @@ void draw() {
   {
     if( ROIContainer.get(i).visualize(kImg) && !lock)
     {
+      thread("lockFunction");
       startTime = millis();
       video.play(i);
-      thread("lockFunction");
     }
   }
   if(lock)
@@ -48,6 +58,13 @@ void draw() {
     textSize(150);
     text((int)((millis()-startTime)/1e3),213,240);
   }
+  if(mouseDragged)
+  {
+    stroke(255,0,0);
+    noFill();
+    rect(actMouseX,actMouseY,mouseX-actMouseX,mouseY-actMouseY);
+  }
+  mouseDragged = false;
   fill(0, 102, 153);
   textSize(fontSize);
   text("Press c to visualize color under the mouse",3,fontSize);
@@ -56,9 +73,20 @@ void draw() {
 }
 void lockFunction()
 {
+  println(".:LOCK:.");
   lock = true;
-  delay(45000);
+  if ( player.isPlaying() )
+  {
+    player.pause();
+  } 
+  delay(35000);
+  if ( !player.isPlaying() )
+  {
+    player.loop();
+  }
+  delay(10000);
   lock = false;
+  println(".:UNLOCK:.");
 }
 void keyPressed() {
   switch (key) 
@@ -117,4 +145,8 @@ void mouseReleased() {
     ROIContainer.addElement(new ROI(actMouseX,actMouseY,mouseX-actMouseX,mouseY-actMouseY));
     ROIContainer.lastElement().setAvgColor();
   }
+}
+void mouseDragged()
+{
+  mouseDragged = true;
 }
