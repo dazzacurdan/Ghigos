@@ -1,9 +1,8 @@
-import org.openkinect.freenect.*;
-import org.openkinect.processing.*;
+
 import ddf.minim.*;
 
 int fontSize = 15;
-Kinect kinect;
+KinectWrap kinect;
 boolean ir = false;
 boolean colorDepth = false;
 boolean mirror = false;
@@ -22,15 +21,15 @@ Minim minim;
 AudioPlayer player;
 
 void setup() {
+  kinect = new OpenKinectWrap(this);
+  
   size(640, 480);
   
   minim = new Minim(this);
   player = minim.loadFile("audio.mp3",512);
   player.loop();
   
-  kinect = new Kinect(this);
-  kinect.initDepth();
-  kinect.enableColorDepth(true);
+  
   ROIContainer = new Vector<ROI>();
   video = new PlayVideo();
   lock = false;mouseDragged=false;
@@ -41,7 +40,7 @@ void setup() {
 void draw() {
   background(0);
   kImg = kinect.getDepthImage();
-  image(kinect.getDepthImage(), 0, 0);
+  image(kImg, 0, 0);
   
   for(int i=0;i<ROIContainer.size();++i)
   {
