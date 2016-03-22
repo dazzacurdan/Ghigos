@@ -21,9 +21,20 @@ Minim minim;
 AudioPlayer player;
 
 void setup() {
+  //size(640, 480);
+  size(960, 640);
   kinect = new OpenKinectWrap(this);
-  
-  size(640, 480);
+  /*
+  switch( kinect.getNumDevices() )
+  {
+    case 1:
+      size(640, 480);
+    break;
+    case 2:
+      size(640, 2*480);
+    break;
+  }
+  */
   
   minim = new Minim(this);
   player = minim.loadFile("audio.mp3",512);
@@ -125,6 +136,27 @@ void keyPressed() {
       actColor &= 0x00FFFFFF; 
       println("TH color: "+hex(actColor)+" color("+((actColor >> 16)&0x0000FF)+", "+((actColor >> 8)&0x0000FF)+", "+(actColor & 0xFF)+")");
     }
+    break;
+    case 'l':
+    {
+    }
+    break;
+    case 'r':
+    {
+    }
+    break;
+    case CODED:
+    {
+      switch(keyCode)
+      {
+        case RIGHT:
+          kinect.switchImages();
+        break;
+        case UP:
+          kinect.flipImages();
+        break;
+      }
+    } 
     break;
   }
 }
